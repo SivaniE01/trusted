@@ -7,6 +7,4 @@ public
 docs
 playwright-report
 test-results
-# Ported verbatim from the POC; keep it diffable against docs/poc/finaleee.html
-app/globals.css
 components/webgl/shaders

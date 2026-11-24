@@ -49,16 +49,35 @@ export function ParticleStage({ animated = true }: { animated?: boolean }) {
   useEffect(() => {
     const bar = progressRef.current;
     if (!bar) return;
-    const update = () => {
-      const maximum = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = (maximum > 0 ? (window.scrollY / maximum) * 100 : 0) + "%";
+    /* scrollHeight forces layout, so cache it (refreshed when the page resizes) and write at most once per frame */
+    let maximum = 0;
+    let raf = 0;
+    let last = "";
+    const measure = () => {
+      maximum = document.documentElement.scrollHeight - window.innerHeight;
+      schedule();
     };
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
+    const paint = () => {
+      raf = 0;
+      const width = (maximum > 0 ? (window.scrollY / maximum) * 100 : 0).toFixed(2) + "%";
+      if (width !== last) {
+        last = width;
+        bar.style.width = width;
+      }
+    };
+    function schedule() {
+      if (!raf) raf = requestAnimationFrame(paint);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(document.body);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", measure);
+    measure();
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      observer.disconnect();
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", measure);
     };
   }, []);
 

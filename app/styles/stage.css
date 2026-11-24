@@ -1,0 +1,185 @@
+/* Fixed background: WebGL stage, cursor aura, scroll progress, viewport edge fades */
+
+.particle-stage {
+  z-index: 0;
+  pointer-events: none;
+  background: #020202;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.neural-fallback,
+.particle-canvas,
+.particle-vignette,
+.particle-grain {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+.neural-fallback {
+  opacity: 0.28;
+  filter: saturate(1.16) contrast(1.24) brightness(1.12);
+  /* static fallback when WebGL is unavailable (hidden once .is-ready is set) */
+  background-image: url("/images/planet.webp");
+  background-position: 50%;
+  background-size: cover;
+  transition: opacity 1.4s;
+  animation: 12s ease-in-out infinite image-breathe;
+  transform: scale(1.015);
+}
+
+.particle-stage.is-ready .neural-fallback {
+  opacity: 0;
+  animation: none;
+}
+
+.particle-canvas {
+  opacity: 0;
+  transition: opacity 1.5s;
+}
+
+.particle-stage.is-ready .particle-canvas {
+  opacity: 1;
+}
+
+.particle-vignette {
+  background:
+    linear-gradient(90deg, #030303fa 0%, #030303d1 27%, #03030309 67%, #0303031f 100%),
+    linear-gradient(#0303037a, #0000 26% 72%, #030303 100%);
+}
+
+.particle-grain {
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.68'/%3E%3C/svg%3E");
+}
+
+@keyframes image-breathe {
+  0%,
+  to {
+    transform: scale(1.015) translate(0);
+  }
+
+  50% {
+    transform: scale(1.035) translate(-0.3%, -0.2%);
+  }
+}
+
+.cursor-aura {
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 8px #e2a02c1a);
+  mix-blend-mode: screen;
+  will-change: transform;
+  background: radial-gradient(circle, #ffda8024 0%, #e0a0340e 22%, #0000 68%);
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  transition: opacity 0.28s;
+  position: fixed;
+  top: -45px;
+  left: -45px;
+}
+
+.cursor-aura.is-active {
+  opacity: 1;
+}
+
+.cursor-aura:before,
+.cursor-aura:after {
+  content: "";
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-aura:before {
+  border: 1px solid #ecb44b42;
+  width: 22px;
+  height: 22px;
+  animation: 2.4s ease-in-out infinite cursor-field-pulse;
+  box-shadow:
+    0 0 9px #e19d2a17,
+    inset 0 0 7px #e19d2a0f;
+}
+
+.cursor-aura:after {
+  background: #ffdf97db;
+  width: 4px;
+  height: 4px;
+  box-shadow:
+    0 0 8px #ffd579e6,
+    0 0 26px #df9d2ab8;
+}
+
+@keyframes cursor-field-pulse {
+  0%,
+  to {
+    opacity: 0.42;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  50% {
+    opacity: 0.78;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+.scroll-progress {
+  z-index: 100;
+  background: linear-gradient(90deg, #ad7319, var(--gold-bright));
+  height: 2px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-shadow: 0 0 14px #ffc55cb8;
+}
+
+.viewport-fade-top {
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(180deg, #030303 0%, rgba(3, 3, 3, 0.8) 50%, rgba(3, 3, 3, 0) 100%);
+  height: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.viewport-fade-bottom {
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(0deg, #030303 0%, rgba(3, 3, 3, 0.85) 50%, rgba(3, 3, 3, 0) 100%);
+  height: 110px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.viewport-fade-left {
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(90deg, #030303 0%, rgba(3, 3, 3, 0.7) 45%, rgba(3, 3, 3, 0) 100%);
+  width: 60px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.viewport-fade-right {
+  z-index: 40;
+  pointer-events: none;
+  background: linear-gradient(270deg, #030303 0%, rgba(3, 3, 3, 0.7) 45%, rgba(3, 3, 3, 0) 100%);
+  width: 60px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}

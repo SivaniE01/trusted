@@ -33,7 +33,14 @@ export function startParticleHero({ stage, layer, vignette, aura }: ParticleHero
   canvas.setAttribute("aria-hidden", "true");
   layer.prepend(canvas);
 
-  const glOptions: WebGLContextAttributes = { alpha: true, antialias: true, powerPreference: "high-performance" };
+  /* antialiasing buys nothing for additive-blended point sprites and costs a multisampled framebuffer */
+  const glOptions: WebGLContextAttributes = {
+    alpha: true,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    powerPreference: "high-performance",
+  };
   const gl = (canvas.getContext("webgl2", glOptions) ?? canvas.getContext("webgl", glOptions)) as
     WebGLRenderingContext | WebGL2RenderingContext | null;
   if (!gl) {
@@ -115,7 +122,9 @@ export function startParticleHero({ stage, layer, vignette, aura }: ParticleHero
   const yawLocation = gl.getUniformLocation(prog, "uYaw");
   const brightLocation = gl.getUniformLocation(prog, "uBright");
 
-  const pixelRatio = () => Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5);
+  /* adaptive resolution: starts at 1.0 and only ever steps down if frames run long (never oscillates) */
+  let quality = 1;
+  const pixelRatio = () => Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.25) * quality;
 
   const resize = () => {
     const ratio = pixelRatio();
@@ -306,8 +315,23 @@ export function startParticleHero({ stage, layer, vignette, aura }: ParticleHero
     hidden = document.hidden;
   });
 
+  let lastFrame = 0;
+  let avgFrame = 16.7;
+  let frameCount = 0;
   const render = (timestamp: number) => {
-    if (hidden || pointCount === 0) return;
+    if (hidden || pointCount === 0) {
+      lastFrame = 0;
+      return;
+    }
+    const dt = lastFrame ? timestamp - lastFrame : 0;
+    lastFrame = timestamp;
+    if (dt > 0 && dt < 200) {
+      avgFrame += (dt - avgFrame) * 0.06;
+      if (++frameCount % 90 === 0 && avgFrame > 24 && quality > 0.6) {
+        quality = Math.max(0.6, quality * 0.85);
+        resize();
+      }
+    }
     if (performance.now() - lastPointerMove > 1400) targetPointerPresence = 0;
     const pointerDeltaX = targetPointerX - pointerX;
     const pointerDeltaY = targetPointerY - pointerY;

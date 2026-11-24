@@ -1,0 +1,67 @@
+/* Reset, design tokens and element defaults */
+
+:root {
+  --ink: #030303;
+  --ink-soft: #080807;
+  --panel: #100f0cc2;
+  --line: #ffffff1c;
+  --line-gold: #e0a94057;
+  --gold: #e0a940;
+  --gold-bright: #ffd777;
+  --gold-pale: #ffedbd;
+  --cream: #f4f0e8;
+  --muted: #a39e94;
+  --muted-dark: #706b62;
+  --max: 1280px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ink);
+  color: var(--cream);
+  scroll-behavior: smooth;
+  scrollbar-color: #7b5a21 #050505;
+}
+
+body {
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  color: inherit;
+}
+
+::selection {
+  background: var(--gold);
+  color: #050505;
+}
+
+main,
+.site-footer {
+  z-index: 2;
+  position: relative;
+}

@@ -1,0 +1,158 @@
+/* Programs */
+
+.programs {
+  border-top: 1px solid var(--line);
+}
+
+.section-heading {
+  grid-template-columns: 1.4fr 0.55fr;
+  align-items: end;
+  gap: 90px;
+  display: grid;
+}
+
+.section-heading h2,
+.method-content h2,
+.employer-copy h2,
+.faq-heading h2 {
+  margin-top: 16px;
+}
+
+.program-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 76px;
+  display: grid;
+}
+
+.program-card {
+  border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  background: linear-gradient(145deg, #121210e0, #070706e0);
+  border-radius: 3px;
+  flex-direction: column;
+  min-height: 540px;
+  padding: 34px;
+  transition:
+    transform 0.35s,
+    border-color 0.35s,
+    box-shadow 0.35s;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.program-card:after {
+  content: "";
+  opacity: 0;
+  background: radial-gradient(circle, #d79a3233 0%, #d79a3200 70%);
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  transition: opacity 0.35s;
+  position: absolute;
+  bottom: -80px;
+  right: -80px;
+}
+
+.program-card:hover {
+  border-color: var(--line-gold);
+  transform: translateY(-8px);
+  box-shadow: 0 26px 70px #00000052;
+}
+
+.program-card:hover:after {
+  opacity: 1;
+}
+
+.program-card.featured {
+  background: linear-gradient(145deg, #261d0ee6, #080705eb), var(--ink);
+  border-color: #e1a63c8c;
+}
+
+.popular {
+  background: var(--gold);
+  color: #0a0804;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 13px;
+  font-size: 9px;
+  font-weight: 730;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.program-level {
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 670;
+}
+
+.program-card h3 {
+  letter-spacing: -0.055em;
+  max-width: 280px;
+  margin: 73px 0 20px;
+  font-size: 35px;
+  font-weight: 520;
+  line-height: 1.03;
+}
+
+.program-body {
+  color: var(--muted);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.67;
+}
+
+.program-meta {
+  border-top: 1px solid var(--line);
+  gap: 12px;
+  margin-top: 34px;
+  padding-top: 24px;
+  display: grid;
+}
+
+.program-meta span {
+  color: #918c82;
+  font-size: 11px;
+}
+
+.program-meta span:before {
+  content: "◆";
+  color: var(--gold);
+  vertical-align: 2px;
+  margin-right: 10px;
+  font-size: 6px;
+}
+
+.program-footer {
+  z-index: 1;
+  justify-content: space-between;
+  align-items: end;
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  position: relative;
+}
+
+.program-footer strong {
+  letter-spacing: -0.04em;
+  font-size: 25px;
+  font-weight: 520;
+}
+
+.program-footer button {
+  display: none !important;
+}
+
+/* Program cards: the visually hidden "Apply for …" button outlines the whole card when focused. */
+.program-card:has(.program-apply:focus-visible) {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 4px;
+}

@@ -1,0 +1,149 @@
+/* Manifesto, metric rail, inline links */
+
+.manifesto-link-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 22px 0 28px;
+  width: 100%;
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.manifesto-link-center .inline-link {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 12px 28px;
+  background: rgba(225, 166, 60, 0.08);
+  border: 1.5px solid rgba(225, 166, 60, 0.4);
+  border-radius: 999px;
+  color: var(--gold);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(225, 166, 60, 0.18);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  text-decoration: none;
+}
+
+.manifesto-link-center .inline-link:hover {
+  background: rgba(225, 166, 60, 0.22);
+  border-color: rgba(225, 166, 60, 0.85);
+  box-shadow: 0 0 32px rgba(225, 166, 60, 0.45);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.manifesto-link-center .portal-icon {
+  font-size: 13px;
+  transition: transform 0.4s ease;
+}
+
+.manifesto-link-center .inline-link:hover .portal-icon {
+  transform: rotate(90deg) scale(1.2);
+}
+
+.manifesto-copy {
+  padding-top: 6px;
+}
+
+.manifesto-copy > p,
+.section-heading > p,
+.employer-copy > p,
+.faq-heading > p:not(.eyebrow),
+.final-cta > p:not(.eyebrow) {
+  color: var(--muted);
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.inline-link {
+  border: 0;
+  border-bottom: 1px solid var(--line-gold);
+  color: var(--cream);
+  cursor: pointer;
+  background: 0 0;
+  align-items: center;
+  gap: 11px;
+  margin-top: 28px;
+  padding: 0 0 7px;
+  font-size: 13px;
+  font-weight: 610;
+  display: inline-flex;
+  position: relative;
+}
+
+.inline-link span {
+  color: var(--gold);
+}
+
+.metric-rail {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 110px;
+  display: grid;
+}
+
+.metric-rail div {
+  border-right: 1px solid var(--line);
+  align-items: center;
+  gap: 25px;
+  padding: 33px 35px;
+  display: flex;
+}
+
+.metric-rail div:last-child {
+  border: 0;
+}
+
+.metric-rail strong {
+  color: var(--gold-bright);
+  letter-spacing: -0.055em;
+  font-size: clamp(31px, 3vw, 48px);
+  font-weight: 480;
+}
+
+.metric-rail span {
+  color: #79756d;
+  max-width: 170px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Right-align the manifesto text (the link and metric rail stay centred).
+   Kept as !important overrides: they must win over the responsive grid rules above. */
+.manifesto-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+  width: 100% !important;
+}
+.manifesto-grid .eyebrow,
+.manifesto-grid h2,
+.manifesto-grid .manifesto-copy {
+  text-align: right !important;
+  margin-left: auto !important;
+  max-width: 820px !important;
+  width: 100% !important;
+}
+.manifesto-grid .eyebrow {
+  display: block !important;
+  text-align: right !important;
+}
+.manifesto-copy > p {
+  text-align: right !important;
+  margin-left: auto !important;
+}
+.manifesto-link-center {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 28px 0 !important;
+  width: 100% !important;
+  text-align: center !important;
+}

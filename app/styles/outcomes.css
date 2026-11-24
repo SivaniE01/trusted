@@ -1,0 +1,65 @@
+/* Outcomes / projects */
+
+.section-heading.compact {
+  grid-template-columns: 1.35fr 0.65fr;
+}
+
+.project-grid {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 75px;
+  display: grid;
+}
+
+.project-grid article {
+  border-right: 1px solid var(--line);
+  background: #08080794;
+  min-height: 365px;
+  padding: 24px;
+  transition: background 0.35s;
+}
+
+.project-grid article:last-child {
+  border: 0;
+}
+
+.project-grid article:hover {
+  background: #20190dc2;
+}
+
+.project-top {
+  color: #69645b;
+  justify-content: space-between;
+  font-size: 9px;
+  display: flex;
+}
+
+.project-top span:last-child {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.project-grid article > strong {
+  color: var(--gold-bright);
+  letter-spacing: -0.06em;
+  margin-top: 84px;
+  font-size: clamp(37px, 3.3vw, 54px);
+  font-weight: 460;
+  display: block;
+}
+
+.project-grid h3 {
+  letter-spacing: -0.03em;
+  text-transform: capitalize;
+  margin: 20px 0 8px;
+  font-size: 17px;
+  font-weight: 570;
+}
+
+.project-grid p {
+  color: #7d786f;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}

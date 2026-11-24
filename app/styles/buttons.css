@@ -1,0 +1,96 @@
+/* Buttons */
+
+.button {
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  border: 1px solid #0000;
+  border-radius: 999px;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 24px;
+  font-weight: 620;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    border-color 0.25s,
+    background 0.25s,
+    color 0.25s;
+  display: inline-flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.button:before {
+  display: none !important;
+}
+
+.button:hover,
+button:hover,
+.button:focus,
+button:focus {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(225, 166, 60, 0.45),
+    0 0 36px rgba(225, 166, 60, 0.2) !important;
+}
+
+.button:active,
+button:active {
+  transform: scale(0.98);
+  box-shadow:
+    0 0 25px rgba(225, 166, 60, 0.75),
+    0 0 50px rgba(225, 166, 60, 0.35) !important;
+}
+
+.button-small {
+  min-height: 40px;
+  padding-inline: 19px;
+  font-size: 13px;
+}
+
+.button-large {
+  min-height: 58px;
+  padding-inline: 29px;
+}
+
+.button-gold {
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--gold-bright) 24%, #d7972d 62%, #a86616 100%);
+  color: #080603;
+  box-shadow:
+    0 10px 40px #c8891f33,
+    inset 0 1px #ffffff8c;
+}
+
+.button-gold:hover {
+  box-shadow:
+    0 15px 58px #d3972b5c,
+    inset 0 1px #ffffff94;
+}
+
+.button-ghost,
+.button-outline {
+  border-color: var(--line);
+  color: var(--cream);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  background: #ffffff09;
+}
+
+.button-ghost:hover,
+.button-outline:hover {
+  background: #e0a94012;
+  border-color: #e0a94073;
+}
+
+.button-light {
+  background: var(--cream);
+  color: #0a0907;
+}
+
+.play-dot {
+  color: var(--gold);
+  filter: drop-shadow(0 0 8px var(--gold));
+  font-size: 9px;
+}

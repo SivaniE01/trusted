@@ -1,0 +1,64 @@
+/* Shared section shell, spacing and headings */
+
+/* No permanent will-change here: it kept every section on its own GPU layer. The browser promotes during transitions. */
+.section-shell {
+  width: min(calc(100% - 48px), var(--max));
+  margin: 0 auto;
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* standard (non-cinematic) scroll: sections dim at the viewport edges */
+.section-shell.scroll-fade-out {
+  opacity: 0.22;
+  filter: blur(4px);
+  transform: scale(0.98);
+}
+
+.manifesto,
+.programs,
+.outcomes,
+.stories,
+.faq {
+  padding-top: 150px;
+  padding-bottom: 150px;
+}
+
+.section-index {
+  color: #5f5b53;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 70px;
+  font-size: 10px;
+}
+
+.manifesto-grid {
+  grid-template-columns: 0.52fr 1.55fr 0.72fr;
+  align-items: start;
+  gap: 60px;
+  display: grid;
+}
+
+.manifesto-grid h2,
+.section-heading h2,
+.method-content h2,
+.employer-copy h2,
+.faq-heading h2,
+.final-cta h2 {
+  letter-spacing: -0.065em;
+  margin: 0;
+  font-size: clamp(45px, 5vw, 75px);
+  font-weight: 480;
+  line-height: 1;
+}
+
+.manifesto-grid h2 span,
+.section-heading h2 span,
+.method-content h2 span,
+.employer-copy h2 span,
+.faq-heading h2 span,
+.final-cta h2 span {
+  color: var(--gold);
+}

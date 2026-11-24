@@ -1,0 +1,160 @@
+/* Stories / testimonials */
+
+.stories {
+  padding-bottom: 140px;
+  overflow: visible;
+}
+
+.stories-header {
+  margin-bottom: 50px;
+}
+
+.stories-header h2 {
+  font-size: clamp(34px, 4.2vw, 56px);
+  font-weight: 550;
+  letter-spacing: -0.045em;
+  margin: 8px 0 0;
+  line-height: 1.1;
+}
+
+.spatial-stage {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 28px;
+  align-items: center;
+  position: relative;
+  padding: 50px 10px;
+  min-height: 480px;
+}
+
+.spatial-card {
+  position: relative;
+  background: rgba(10, 10, 12, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 36px 30px;
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s ease,
+    opacity 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 380px;
+  cursor: pointer;
+}
+
+.spatial-card.card-left {
+  transform: perspective(1200px) translateZ(-35px) translateY(20px) rotateY(6deg) scale(0.93);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 1;
+  opacity: 0.88;
+}
+
+.spatial-card.card-center {
+  transform: perspective(1200px) translateZ(45px) translateY(0px) rotateY(0deg) scale(1.04);
+  border-color: rgba(225, 168, 62, 0.35);
+  box-shadow:
+    0 35px 85px rgba(0, 0, 0, 0.88),
+    0 0 45px rgba(225, 168, 62, 0.14),
+    inset 0 1px 0 rgba(255, 235, 180, 0.3);
+  z-index: 3;
+  opacity: 1;
+}
+
+.spatial-card.card-right {
+  transform: perspective(1200px) translateZ(-35px) translateY(-12px) rotateY(-6deg) scale(0.93);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  z-index: 1;
+  opacity: 0.88;
+}
+
+.spatial-stage:hover .spatial-card {
+  opacity: 0.72;
+}
+
+.spatial-card:hover {
+  opacity: 1 !important;
+  z-index: 10 !important;
+  border-color: rgba(255, 215, 120, 0.55) !important;
+  transform: perspective(1200px) translateZ(75px) translateY(-10px) rotateY(0deg) scale(1.08) !important;
+  box-shadow:
+    0 45px 95px rgba(0, 0, 0, 0.92),
+    0 0 55px rgba(225, 168, 62, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45) !important;
+}
+
+.card-badge {
+  align-self: flex-start;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #a09a8e;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 22px;
+}
+
+.card-badge.featured {
+  color: var(--gold-bright);
+  background: rgba(225, 168, 62, 0.12);
+  border-color: rgba(225, 168, 62, 0.3);
+}
+
+.spatial-card blockquote {
+  font-size: 16px;
+  line-height: 1.58;
+  color: #e2ded4;
+  letter-spacing: -0.015em;
+  margin: 0 0 24px 0;
+  font-weight: 400;
+}
+
+.spatial-card .story-person {
+  align-items: center;
+  gap: 14px;
+  display: flex;
+  margin-top: auto;
+}
+
+.spatial-card .story-person > span {
+  border: 1px solid var(--line-gold);
+  width: 42px;
+  height: 42px;
+  color: var(--gold);
+  border-radius: 50%;
+  place-items: center;
+  font-size: 11px;
+  display: grid;
+  flex-shrink: 0;
+}
+
+.spatial-card .story-person p {
+  gap: 3px;
+  margin: 0;
+  display: grid;
+}
+
+.spatial-card .story-person strong {
+  font-size: 13px;
+  color: #fff;
+}
+
+.spatial-card .story-person small {
+  color: #8a857b;
+  font-size: 11px;
+}
