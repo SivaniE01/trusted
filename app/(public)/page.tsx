@@ -18,7 +18,7 @@ import { CINE_BOOT_SCRIPT } from "@/lib/motion/cineBoot";
 
 /**
  * Landing page. Scene order must match SCENE_INDEX in components/webgl/cineEngine.ts:
- * [hero+signal] [manifesto] [portal] [programs] [method] [outcomes] [employers] [stories] [faq] [cta+footer]
+ * [hero+signal] [programs] [manifesto] [portal] [method] [outcomes] [employers] [stories] [faq] [cta+footer]
  */
 export default function HomePage() {
   return (
@@ -33,13 +33,13 @@ export default function HomePage() {
           <SignalBand />
         </CineScene>
         <CineScene>
+          <Programs />
+        </CineScene>
+        <CineScene>
           <Manifesto />
         </CineScene>
         <CineScene>
           <PortalScroll />
-        </CineScene>
-        <CineScene>
-          <Programs />
         </CineScene>
         <CineScene>
           <Method />

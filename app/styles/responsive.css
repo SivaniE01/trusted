@@ -112,6 +112,10 @@
     padding: 27px;
   }
 
+  .program-art {
+    margin: -27px -27px 22px;
+  }
+
   .method {
     gap: 50px;
   }

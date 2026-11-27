@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { site } from "@/lib/content/site";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -39,7 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     // html.cine is added by an inline script before hydration on the landing page
     <html lang="en-GB" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         {children}
+        <ThemeToggle />
         <CookieConsent />
       </body>
     </html>

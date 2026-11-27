@@ -2,7 +2,7 @@
  * Orbital light ribbons + shooting stars over the star field (appear after the planet has scattered).
  * Ported from the POC `ribbons-js` script; drawing code unchanged, plus lifecycle + cleanup.
  */
-import { Disposer, clamp, ease, isCoarsePointer, prefersReducedMotion } from "@/lib/motion/env";
+import { Disposer, clamp, ease, prefersReducedMotion } from "@/lib/motion/env";
 import { planetJourney } from "@/lib/motion/journey";
 
 type Layer = {
@@ -38,12 +38,11 @@ export function startRibbons(layer: HTMLElement): (() => void) | null {
   }
 
   const d = new Disposer();
-  const coarse = isCoarsePointer();
   let W = 0,
     H = 0,
     DPR = 1;
   const resize = () => {
-    DPR = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.5);
+    DPR = Math.min(window.devicePixelRatio || 1, 1);
     W = window.innerWidth;
     H = window.innerHeight;
     cv.width = Math.round(W * DPR);
@@ -108,7 +107,7 @@ export function startRibbons(layer: HTMLElement): (() => void) | null {
       lw: 1.1,
     },
   ];
-  const SEG = 56;
+  const SEG = 36;
   const gold = (a: number) => "rgba(232,176,72," + a.toFixed(3) + ")";
   const hot = (a: number) => "rgba(255,240,200," + a.toFixed(3) + ")";
 
@@ -151,6 +150,8 @@ export function startRibbons(layer: HTMLElement): (() => void) | null {
   let last = performance.now(),
     wasDrawn = false;
   const frame = (now: number) => {
+    /* the ribbons drift slowly, so ~30fps looks the same and leaves frame time for scrolling */
+    if (now - last < 30) return;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     if (document.hidden) return;

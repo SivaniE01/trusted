@@ -26,7 +26,7 @@ export function CookieConsent() {
   return (
     <section
       aria-label="Cookie preferences"
-      className="fixed inset-x-4 bottom-4 z-[300] mx-auto max-w-xl rounded-2xl border border-line-gold bg-ink-soft/95 p-5 text-sm text-muted shadow-[0_30px_90px_#000000b3] backdrop-blur-xl sm:p-6"
+      className="cookie-consent fixed inset-x-4 bottom-4 z-[300] mx-auto max-w-xl rounded-2xl border border-line-gold bg-ink-soft/95 p-5 text-sm text-muted shadow-[0_30px_90px_#000000b3] backdrop-blur-xl sm:p-6"
     >
       <p className="m-0 leading-relaxed">
         We use essential cookies to run this site. With your permission we’d also like to use analytics to understand

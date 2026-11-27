@@ -1,7 +1,7 @@
 /**
  * Cinematic scroll engine — ported from the POC `cine-js` script.
  * Scroll = timeline: <main> is pinned as a fixed stage and scrollY scrubs scene transitions,
- * with a stop-by-stop snap engine (one wheel gesture / key press / swipe = one stop).
+ * with free native scrolling. Nav links and portal controls spring to their stop.
  *
  * Differences from the POC:
  *  - React renders the scene wrappers, the portal scroll section, the focus pill and the spacer up front;
@@ -10,15 +10,15 @@
  *  - Global key/wheel/touch handlers stand down inside dialogs, the mobile menu and form fields.
  *  - Everything is undone by the returned dispose().
  */
-import { Disposer, clamp, ease, isCoarsePointer, isDialogOpen, isTypingTarget, lerp } from "@/lib/motion/env";
+import { Disposer, clamp, ease, isCoarsePointer, lerp } from "@/lib/motion/env";
 import { planetJourney, planetTarget, resetJourney } from "@/lib/motion/journey";
 
 /** Scene order (must match app/(public)/page.tsx). */
 export const SCENE_INDEX = {
   hero: 0,
-  manifesto: 1,
-  portal: 2,
-  programs: 3,
+  programs: 1,
+  manifesto: 2,
+  portal: 3,
   method: 4,
   outcomes: 5,
   employers: 6,
@@ -28,6 +28,8 @@ export const SCENE_INDEX = {
 } as const;
 
 const PORTAL = SCENE_INDEX.portal;
+/** The slide with the "See how the academy works" button, which flies from there into the portal. */
+const MANIFESTO = SCENE_INDEX.manifesto;
 
 /**
  * Cinematic snap feel. A move is TWO critically-damped springs chained: a "lead" that chases the target quickly,
@@ -52,7 +54,7 @@ const LEAD_RATIO = 2.6;
 const ANCHORS: Record<string, number> = {
   "#top": 0,
   "#signal": 1,
-  "#programs": 3,
+  "#programs": 1,
   "#method": 4,
   "#outcomes": 5,
   "#employers": 6,
@@ -62,8 +64,8 @@ const ANCHORS: Record<string, number> = {
 
 type KidSpec = { sel: string; dx: number[]; dy: number[]; op: boolean; sc: number };
 const KID_SPECS: Record<number, KidSpec> = {
-  1: { sel: ".metric-rail > div", dx: [0, 0, 0], dy: [70, 70, 70], op: true, sc: 0.06 },
-  3: { sel: ".program-card", dx: [-60, 0, 60], dy: [110, 150, 110], op: true, sc: 0.08 },
+  1: { sel: ".program-card", dx: [-60, 0, 60], dy: [110, 150, 110], op: true, sc: 0.08 },
+  2: { sel: ".metric-rail > div", dx: [0, 0, 0], dy: [70, 70, 70], op: true, sc: 0.06 },
   4: { sel: ".method-visual", dx: [-160], dy: [0], op: true, sc: 0.25 },
   5: { sel: ".project-grid article", dx: [0, 0, 0, 0], dy: [90, 90, 90, 90], op: true, sc: 0.05 },
   6: { sel: ".talent-card", dx: [160], dy: [0], op: true, sc: 0.06 },
@@ -73,9 +75,9 @@ const KID_SPECS: Record<number, KidSpec> = {
 
 type Pose = { x?: number; y?: number; z?: number; rx?: number; ry?: number; s?: number; b?: number; clip?: string };
 /* per-scene cinematic transforms: a = 1-enter (0 once fully in), l = leave (0..1) */
-const enterLeave = (a: number, l: number): Pose => ({ y: 40 * a - 30 * l, s: 1 - 0.03 * a - 0.03 * l, b: 0 });
+const enterLeave = (a: number, l: number): Pose => ({ y: a - l, s: 1 - 0.03 * a - 0.03 * l, b: 0 });
 const FX: ((a: number, l: number) => Pose)[] = [
-  (_a, l) => ({ y: -30 * l, s: 1 - 0.04 * l, b: 0 }),
+  (_a, l) => ({ y: -l, s: 1 - 0.04 * l, b: 0 }),
   enterLeave,
   enterLeave,
   enterLeave,
@@ -84,7 +86,7 @@ const FX: ((a: number, l: number) => Pose)[] = [
   enterLeave,
   enterLeave,
   enterLeave,
-  (a) => ({ y: 40 * a, s: 1 - 0.03 * a, b: 0 }),
+  (a) => ({ y: a, s: 1 - 0.03 * a, b: 0 }),
 ];
 
 type Kid = { el: HTMLElement; last: string };
@@ -235,7 +237,8 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
     vw = window.innerWidth;
     vh = window.innerHeight;
     mob = vw <= 820;
-    T = vh * (mob ? 0.25 : 0.3);
+    /* scroll distance of a page change; pages travel this far, so they move 1:1 with the scroll on average */
+    T = vh * 0.8;
     const headerH = vw <= 760 ? 72 : 84;
     let pos = 0;
     scenes.forEach((s, i) => {
@@ -257,8 +260,8 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
       s.over = Math.max(0, eff - avail);
       s.off = s.over > 0 ? top : top + (avail - eff) / 2;
       if (i === 0) s.off = Math.max(0, (vh - eff) / 2);
-      s.base = vh * (i === 0 ? 0.3 : i === PORTAL && pCards.length ? 0.4 : 0.25);
-      if (i === 1 && focusBtn) {
+      s.base = vh * (i === PORTAL && pCards.length ? 1.6 : 0.08);
+      if (i === MANIFESTO && focusBtn) {
         /* zoom origin = the "See how the academy works" button */
         const wr = s.wrap.getBoundingClientRect(),
           br = focusBtn.getBoundingClientRect();
@@ -310,7 +313,7 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
         "translate3d(" +
         ((p.x || 0) * (mob ? 0.5 : 1)).toFixed(1) +
         "px," +
-        (p.y || 0).toFixed(1) +
+        ((p.y || 0) * T).toFixed(1) +
         "px," +
         ((p.z || 0) * k).toFixed(1) +
         "px) rotateX(" +
@@ -332,7 +335,7 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
         }
       }
       /* glow on "See how the academy works" just before the camera flies into it */
-      if (i === 1 && focusBtn) {
+      if (i === MANIFESTO && focusBtn) {
         const fo = clamp((y - s.end + T * 0.3) / (T * 0.5));
         const fs =
           fo > 0.01
@@ -389,9 +392,7 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
             "|" +
             "brightness(" +
             ps.br.toFixed(2) +
-            ") blur(" +
-            ps.bl.toFixed(1) +
-            "px)|" +
+            ")|" +
             (10 - Math.round(Math.abs(kk - portalPos) * 2)) +
             "|" +
             (kk === idx ? 1 : 0);
@@ -474,8 +475,8 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
         });
       }
     });
-    /* focus pill: the button lifts out of slide 2, flies to centre over the stars and opens into the portal */
-    const s1f = scenes[1];
+    /* focus pill: the button lifts out of the manifesto slide, flies to centre over the stars and opens into the portal */
+    const s1f = scenes[MANIFESTO];
     if (focusWrap && focusPill && focusBtn && s1f) {
       const L = clamp((y - s1f.end) / T);
       if (L <= 0.001 || L >= 0.999) {
@@ -520,13 +521,13 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
         setStyle(focusPill, "background", "rgba(225,166,60," + (0.08 + 0.16 * a1).toFixed(3) + ")");
       }
     }
-    /* planet journey: moves left while slide 2 ("Proof beats prompts") comes in,
-       then breaks into stars and zooms in as you leave it for the next slides */
+    /* planet journey: moves left as you leave the hero, then breaks into stars
+       and zooms in as you leave "Proof beats prompts" for the next slides */
     const s0 = scenes[0];
-    const s1 = scenes[1];
+    const s1 = scenes[MANIFESTO];
     if (s0 && s1) {
       planetTarget.current = {
-        move: ease(clamp((y - s0.start) / Math.max(1, (s0.end - s0.start) * 2.5))),
+        move: ease(clamp((y - s0.start) / Math.max(1, s0.end + T))),
         explode: ease(clamp((y - s1.end + T * 0.2) / (T * 1.8))),
         zoom: clamp((y - s1.end) / (T * 2.5)),
       };
@@ -541,8 +542,7 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
     if (best >= 0) activeIndex = best;
   };
 
-  /* STOP-BY-STOP SNAP ENGINE. One scroll gesture = one stop (every slide is a stop, and each of the 4 academy
-     cards is its own stop). The move to a stop is a chain of two critically-damped springs, not a fixed tween:
+  /* STOPS for nav links and portal controls (every page, and each of the 4 academy cards). The move to a stop is a chain of two critically-damped springs, not a fixed tween:
        - soft start, long glide, gentle landing (an S-curve), so it reads as a camera move rather than a jump,
        - it can be retargeted mid-flight and keeps its motion, so scrolling again is never ignored or jerky,
        - its length scales with the distance, so short hops are quick and the long planet leg stays cinematic.
@@ -625,12 +625,16 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
       cur = Math.max(0, cur);
       window.scrollTo(0, cur);
     } else {
-      cur = window.scrollY;
+      /* glide toward the real scroll position, so wheel notches don't show as steps */
+      const y = window.scrollY;
+      cur += (y - cur) * (1 - Math.exp(-dt * 11));
+      if (Math.abs(y - cur) < 0.5) cur = y;
     }
     render(cur);
     const mouseMoving = Math.abs(tmx - mx) > 0.002 || Math.abs(tmy - my) > 0.002;
     const portalLive = pCards.length > 0 && Boolean(scenes[PORTAL]?.vis);
-    if (animating || mouseMoving || portalLive) raf = requestAnimationFrame(frame);
+    if (animating || mouseMoving || portalLive || Math.abs(window.scrollY - cur) >= 0.5)
+      raf = requestAnimationFrame(frame);
     else lastFrame = 0;
   };
   const kick = () => {
@@ -666,20 +670,6 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
     kick();
   };
   const goToScene = (sceneIdx: number, stiffness?: number) => goToStop(Math.max(0, sceneToStop(sceneIdx)), stiffness);
-  const step = (dir: 1 | -1) => {
-    const stops = getStops();
-    const current = stops[curStop];
-    /* mid-flight, build on the stop we are heading to, so quick repeated gestures walk through the stops */
-    const base =
-      animating || (current && Math.abs(current.y - window.scrollY) < 4) ? curStop : nearestStop(window.scrollY);
-    const next = base + dir;
-    if (next < 0 || next > stops.length - 1) return;
-    goToStop(next);
-  };
-
-  /** Global handlers must not hijack input while a dialog / the mobile menu is open. */
-  const standDown = () => isDialogOpen() || Boolean(document.querySelector(".mobile-menu.open"));
-
   d.on(
     window,
     "scroll",
@@ -690,70 +680,15 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
     { passive: true },
   );
 
-  /* ONE GESTURE = ONE STOP. Trackpad inertia / rapid notches count as the same gesture until the wheel goes quiet,
-     or until a fresh flick spikes on top of a fading inertia tail. A new gesture is honoured immediately, even
-     while the previous snap is still moving (it retargets instead of being ignored). */
-  let lastWheel = 0,
-    lastDelta = 0,
-    gestureStart = 0,
-    gestureUsed = false;
-  d.on(
-    window,
-    "wheel",
-    (e) => {
-      if (standDown()) return;
-      e.preventDefault();
-      const now = performance.now();
-      const delta = Math.abs(e.deltaY);
-      const quiet = now - lastWheel >= 110;
-      const freshFlick = gestureUsed && delta > 40 && delta > lastDelta * 1.8 && now - gestureStart > 220;
-      if (quiet || freshFlick) gestureUsed = false;
-      lastWheel = now;
-      if (delta < 3) return;
-      lastDelta = delta;
-      if (gestureUsed) return;
-      gestureUsed = true;
-      gestureStart = now;
-      step(e.deltaY > 0 ? 1 : -1);
-    },
-    { passive: false },
-  );
-
-  let touchStartY = 0;
-  d.on(
-    window,
-    "touchstart",
-    (e) => {
-      const touch = e.touches[0];
-      if (touch) touchStartY = touch.clientY;
-    },
-    { passive: true },
-  );
-  d.on(
-    window,
-    "touchend",
-    (e) => {
-      if (standDown()) return;
-      const touch = e.changedTouches[0];
-      if (!touch) return;
-      const deltaY = touchStartY - touch.clientY;
-      if (Math.abs(deltaY) > 30) step(deltaY > 0 ? 1 : -1);
-    },
-    { passive: true },
-  );
-
-  d.on(window, "keydown", (e) => {
-    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || standDown() || isTypingTarget(e.target)) return;
-    /* Space on a focused button/link activates it; leave that alone */
-    const onControl = e.target instanceof HTMLElement && Boolean(e.target.closest("button, a, [role='button']"));
-    if (["ArrowDown", "PageDown"].includes(e.key) || (e.key === " " && !onControl)) {
-      e.preventDefault();
-      step(1);
-    } else if (["ArrowUp", "PageUp"].includes(e.key)) {
-      e.preventDefault();
-      step(-1);
-    }
-  });
+  /* Scrolling is native. If the visitor scrolls during a link / portal jump, let go so the two don't fight. */
+  const release = () => {
+    if (!animating) return;
+    animating = false;
+    vel = aimVel = 0;
+  };
+  d.on(window, "wheel", release, { passive: true });
+  d.on(window, "touchstart", release, { passive: true });
+  d.on(window, "keydown", release);
 
   if (finePointer) {
     d.on(
@@ -868,7 +803,7 @@ export function startCineScroll(main: HTMLElement): CineEngine | null {
     /* only runs when the pointer or scroll moved, and does all layout reads before any style writes
        (interleaving them forced a synchronous layout per card, every frame) */
     d.loop(() => {
-      if (!leanDirty || animating) return;
+      if (!leanDirty || animating || Math.abs(window.scrollY - cur) >= 0.5) return;
       leanDirty = false;
       const px = ((mx + 1) / 2) * vw,
         py = ((my + 1) / 2) * vh;

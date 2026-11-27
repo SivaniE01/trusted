@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { CineEngine } from "@/components/webgl/cineEngine";
-import { isDialogOpen, prefersReducedMotion } from "@/lib/motion/env";
+import { isCoarsePointer, isDialogOpen, prefersReducedMotion } from "@/lib/motion/env";
 
 /**
  * Owns cinematic mode for the landing page.
@@ -23,7 +23,8 @@ export function CineScroll() {
     const main = document.querySelector<HTMLElement>("main");
     if (!main) return;
 
-    if (!cinematic || prefersReducedMotion()) {
+    /* touch devices scroll normally: the stop-by-stop engine fights native momentum scrolling */
+    if (!cinematic || prefersReducedMotion() || isCoarsePointer()) {
       root.classList.remove("cine");
       if (wasCinematic.current) {
         /* the cine timeline's scroll offset means nothing in standard mode: return to the section being viewed */

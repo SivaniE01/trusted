@@ -1,0 +1,258 @@
+/* Light theme: html[data-theme="light"], set by the theme toggle. Dark remains the default design. */
+
+html[data-theme="light"] {
+  --ink: #faf7f0;
+  --ink-soft: #f3eee3;
+  --panel: #fffdf8e6;
+  --line: #2a210f26;
+  --line-gold: #8a5f0c66;
+  --gold: #855a07;
+  --gold-bright: #7a5104;
+  --gold-pale: #5f4003;
+  --cream: #17130b;
+  --muted: #4d473b;
+  --muted-dark: #5f584a;
+  color-scheme: light;
+  scrollbar-color: #b98d33 #f3eee3;
+}
+
+/* contrast panels keep the original dark palette */
+html[data-theme="light"] :is(.portal-modal-backdrop, .portal-3d-stage, .talent-card) {
+  --ink: #030303;
+  --line: #ffffff1c;
+  --line-gold: #e0a94057;
+  --gold: #e0a940;
+  --gold-bright: #ffd777;
+  --gold-pale: #ffedbd;
+  --cream: #f4f0e8;
+  --muted: #a39e94;
+  --muted-dark: #8a857b;
+  color: var(--cream);
+}
+
+/* background: planet and stars redrawn as dark gold on cream */
+html[data-theme="light"] .particle-stage {
+  background: #faf7f0;
+}
+
+html[data-theme="light"] :is(.particle-canvas, .ribbon-canvas) {
+  filter: invert(1) hue-rotate(180deg);
+  mix-blend-mode: normal !important;
+}
+
+html[data-theme="light"] :is(.neural-fallback, .particle-grain, .cursor-aura) {
+  display: none;
+}
+
+html[data-theme="light"] .particle-vignette {
+  background:
+    linear-gradient(90deg, #faf7f0f2 0%, #faf7f0bf 30%, #faf7f000 67%),
+    linear-gradient(#faf7f099, #faf7f000 26% 72%, #faf7f0);
+}
+
+html[data-theme="light"] .viewport-fade-top {
+  background: linear-gradient(180deg, #faf7f0, #faf7f000);
+}
+
+html[data-theme="light"] .viewport-fade-bottom {
+  background: linear-gradient(0deg, #faf7f0, #faf7f000);
+}
+
+html[data-theme="light"] .viewport-fade-left {
+  background: linear-gradient(90deg, #faf7f0, #faf7f000);
+}
+
+html[data-theme="light"] .viewport-fade-right {
+  background: linear-gradient(270deg, #faf7f0, #faf7f000);
+}
+
+/* surfaces */
+html[data-theme="light"] .site-header {
+  background: #faf7f0f2;
+  border-bottom-color: var(--line);
+}
+
+html[data-theme="light"] .mobile-menu {
+  background: #faf7f0fa;
+}
+
+html[data-theme="light"] :is(.signal-band, .method):not(.method),
+html[data-theme="light"] .method:before {
+  background: #f3eee3e8;
+}
+
+html[data-theme="light"] :is(.program-card, .spatial-card, .availability) {
+  background: #fffdf8f0;
+}
+
+html[data-theme="light"] .program-card.featured {
+  background: linear-gradient(145deg, #fff0cdf5, #fffdf8f5);
+  border-color: #a8781f;
+}
+
+html[data-theme="light"] .program-card:is(:hover, :active, :has(.program-apply:focus-visible)) {
+  border-color: #b8860f;
+  box-shadow:
+    0 0 0 1px #b8860f80,
+    0 0 34px #d99a2480,
+    0 0 70px #d99a2445;
+}
+
+html[data-theme="light"] .program-art img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-theme="light"] .project-grid article {
+  background: #fffdf8d9;
+}
+
+html[data-theme="light"] .project-grid article:hover {
+  background: #fff0cde6;
+}
+
+html[data-theme="light"] .spatial-card {
+  border-color: var(--line);
+  box-shadow: 0 22px 55px #4a36101f;
+}
+
+html[data-theme="light"] .spatial-card:hover {
+  box-shadow: 0 28px 65px #4a36102e !important;
+}
+
+html[data-theme="light"]
+  :is(.button-ghost, .button-outline, .apply-form input, .apply-form select, .answer-list button) {
+  background: #fffdf8;
+}
+
+html[data-theme="light"] .apply-form select {
+  color-scheme: light;
+}
+
+html[data-theme="light"] .modal-backdrop {
+  background: #2a210f99;
+}
+
+html[data-theme="light"] .modal {
+  background: linear-gradient(145deg, #fffdf8, #f6f0e2);
+}
+
+/* gold buttons stay bright, so their label stays dark */
+html[data-theme="light"] .button-gold {
+  background: linear-gradient(135deg, #ffe9ac, #f0bf4c 55%, #d99a2b);
+  color: #17130b;
+}
+
+html[data-theme="light"] .button-light {
+  color: #faf7f0;
+}
+
+/* text with colours written for a black background */
+html[data-theme="light"] :is(.hero h1 span span, .method-line.line-3 span) {
+  background: linear-gradient(110deg, #a8740f, #8a5b0a 45%, #5c3b04 93%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html[data-theme="light"] .gold-text {
+  text-shadow: none;
+}
+
+html[data-theme="light"] :is(.method-line.line-1, .method-line.line-2, .spatial-card .story-person strong) {
+  color: var(--cream);
+}
+
+html[data-theme="light"] .spatial-card blockquote {
+  color: #2d2819;
+}
+
+html[data-theme="light"]
+  :is(
+    .desktop-nav a,
+    .nav-link-button,
+    .hero-copy,
+    .hero-proof span,
+    .scroll-cue,
+    .availability,
+    .signal-band p,
+    .signal-logos span,
+    .section-index,
+    .metric-rail span,
+    .program-meta span,
+    .method-list span,
+    .orbit span,
+    .project-top,
+    .project-grid p,
+    .faq-list article > div > p,
+    .site-footer > div:first-child > p,
+    .footer-links a,
+    .footer-links button,
+    .footer-bottom,
+    .card-badge,
+    .spatial-card .story-person small,
+    .modal-close,
+    .modal-kicker span,
+    .assessment-result > p:not(.eyebrow),
+    .text-button,
+    .apply-form label,
+    .apply-form small
+  ) {
+  color: var(--muted);
+}
+
+html[data-theme="light"] :is(.desktop-nav a:hover, .nav-link-button:hover) {
+  color: var(--cream);
+}
+
+/* the switch */
+.theme-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-gold);
+  border-radius: 50%;
+  background: var(--ink-soft);
+  color: var(--gold);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.theme-toggle .to-dark,
+html[data-theme="light"] .theme-toggle .to-light {
+  display: none;
+}
+
+html[data-theme="light"] .theme-toggle .to-dark {
+  display: inline;
+}
+
+html[data-theme="light"] .cookie-consent {
+  box-shadow: 0 18px 50px #4a361033;
+}
+
+html[data-theme="light"] .footer-bottom,
+html[data-theme="light"] .footer-bottom * {
+  color: var(--muted);
+}
+
+@media (width <= 760px) {
+  /* in the header beside the menu button, clear of the cookie banner */
+  .theme-toggle {
+    top: 15px;
+    right: 76px;
+    bottom: auto;
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
+  }
+
+  /* the side haze washes out the first and last letters on narrow screens */
+  html[data-theme="light"] :is(.viewport-fade-left, .viewport-fade-right) {
+    display: none;
+  }
+}

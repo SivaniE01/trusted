@@ -139,6 +139,7 @@ html.cine .portal-scroll .portal-circular-rim {
 
 /* PERF: backdrop-filter over the live WebGL canvas is re-blurred every frame, once per element.
    In cinematic mode we swap it for a slightly denser flat background (visually near-identical). */
+html.cine .site-header,
 html.cine .signal-band,
 html.cine .program-card,
 html.cine .method:before,
@@ -149,6 +150,11 @@ html.cine .button-outline,
 html.cine .availability {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+
+/* without the blur the header needs a denser background to stay readable */
+html.cine .site-header {
+  background: #050505f2;
 }
 
 html.cine .spatial-card {

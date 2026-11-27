@@ -57,14 +57,36 @@
   right: -80px;
 }
 
-.program-card:hover {
-  border-color: var(--line-gold);
+/* the whole card lights up on hover, press and keyboard focus */
+.program-card:hover,
+.program-card:active,
+.program-card:has(.program-apply:focus-visible) {
+  border-color: var(--gold-bright);
   transform: translateY(-8px);
-  box-shadow: 0 26px 70px #00000052;
+  box-shadow:
+    0 0 0 1px #ffd77766,
+    0 0 34px #e0a94080,
+    0 0 80px #e0a94040,
+    inset 0 0 40px #e0a9401f;
 }
 
-.program-card:hover:after {
+.program-card:hover:after,
+.program-card:active:after {
   opacity: 1;
+}
+
+/* course artwork bleeds to the card edges and fades into it */
+.program-art {
+  margin: -34px -34px 24px;
+  -webkit-mask-image: linear-gradient(#000 70%, #0000);
+  mask-image: linear-gradient(#000 70%, #0000);
+}
+
+.program-art img {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
 }
 
 .program-card.featured {
@@ -83,6 +105,7 @@
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 1;
 }
 
 .program-level {
@@ -97,7 +120,7 @@
 .program-card h3 {
   letter-spacing: -0.055em;
   max-width: 280px;
-  margin: 73px 0 20px;
+  margin: 18px 0 16px;
   font-size: 35px;
   font-weight: 520;
   line-height: 1.03;

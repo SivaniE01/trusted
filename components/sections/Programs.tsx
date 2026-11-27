@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ProgramCard } from "@/components/sections/ProgramCard";
 import { formatPrice, programs } from "@/lib/content/programs";
 
@@ -19,6 +20,10 @@ export function Programs() {
         {programs.map((program) => (
           <ProgramCard key={program.slug} track={program.track} featured={program.featured}>
             {program.badge && <div className="popular">{program.badge}</div>}
+            {/* decorative: the course name and summary carry the meaning */}
+            <div className="program-art">
+              <Image src={`/images/programs/${program.slug}.svg`} alt="" width={400} height={220} />
+            </div>
             <p className="program-level">{program.level}</p>
             <h3>{program.name}</h3>
             {/* the POC hides its arrow button; this keeps the card reachable by keyboard and screen readers */}

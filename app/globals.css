@@ -26,6 +26,7 @@
 @import "./styles/modals.css";
 @import "./styles/responsive.css";
 @import "./styles/cine.css";
+@import "./styles/light.css";
 @import "./styles/a11y.css";
 
 @theme inline {
